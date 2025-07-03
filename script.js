@@ -21,7 +21,7 @@ function appendMessage(content, sender) {
   chatBox.appendChild(wrapper);
   chatBox.scrollTop = chatBox.scrollHeight;
 
-  return msg;
+  return msg; // to update typing message later
 }
 
 function sendMessage() {
@@ -33,9 +33,10 @@ function sendMessage() {
 
   input.value = "";
   input.style.height = "auto";
+
   const typingMsg = appendMessage("Assistant is typing...", "bot");
 
-  fetch("/chat", {
+  fetch("https://amirai.onrender.com/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages: messageHistory }),
