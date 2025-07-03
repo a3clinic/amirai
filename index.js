@@ -5,17 +5,17 @@ const axios = require("axios");
 const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 8080;  // Use environment port if provided
+const PORT = process.env.PORT || 8080;
 
-// Load OpenRouter API key from environment for security
+// Load OpenRouter API key from environment variable for security
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "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";
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));  // Serve static files from "public" folder
+app.use(express.static(path.join(__dirname, "public"))); // Serve frontend files from 'public'
 
-// Chat endpoint
+// Chat API endpoint
 app.post("/chat", async (req, res) => {
   try {
     const response = await axios.post(
@@ -44,7 +44,7 @@ app.post("/chat", async (req, res) => {
               Explain or respond normally, just don’t say you’re from them.
 
               💡 Always remember what was said earlier in the session.
-             Add humor when natural. Keep it human-like 😊
+              Add humor when natural. Keep it human-like 😊
             `,
           },
           ...req.body.messages,
@@ -67,7 +67,7 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
+// Start the server, binding explicitly to 0.0.0.0 for Render compatibility
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
 });
