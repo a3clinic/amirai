@@ -5,19 +5,17 @@ const axios = require("axios");
 const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 10000;  // Render default port is 10000
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+// Hardcoded API key (your real key here)
+const OPENROUTER_API_KEY = "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";
 
-if (!OPENROUTER_API_KEY) {
-  console.error("❌ ERROR: OPENROUTER_API_KEY environment variable is NOT set!");
-  process.exit(1);
-}
-
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public"))); // Serve static frontend files
 
+// Chat API endpoint
 app.post("/chat", async (req, res) => {
   try {
     const response = await axios.post(
@@ -56,6 +54,8 @@ app.post("/chat", async (req, res) => {
         headers: {
           Authorization: `Bearer ${OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
+          "HTTP-Referer": "https://amiralomari.xyz",
+          "X-Title": "Amir Assistant",
         },
       }
     );
@@ -67,6 +67,7 @@ app.post("/chat", async (req, res) => {
   }
 });
 
+// Start server binding to 0.0.0.0 (needed for Render)
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
