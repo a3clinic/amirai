@@ -5,18 +5,17 @@ const axios = require("axios");
 const path = require("path");
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;  // Use environment port if provided
 
-// ✅ Your real OpenRouter API key
-const OPENROUTER_API_KEY =
-  "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";
+// Load OpenRouter API key from environment for security
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "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";
 
-// ✅ Middleware
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "public")));  // Serve static files from "public" folder
 
-// ✅ Chat endpoint
+// Chat endpoint
 app.post("/chat", async (req, res) => {
   try {
     const response = await axios.post(
@@ -58,20 +57,17 @@ app.post("/chat", async (req, res) => {
           "HTTP-Referer": "https://amiralomari.xyz",
           "X-Title": "Amir Assistant",
         },
-      },
+      }
     );
 
     res.json(response.data);
   } catch (error) {
-    console.error(
-      "❌ OpenRouter error:",
-      error.response?.data || error.message,
-    );
+    console.error("❌ OpenRouter error:", error.response?.data || error.message);
     res.status(500).json({ error: "OpenRouter API failed." });
   }
 });
 
-// ✅ Start server
+// Start server
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
 });
