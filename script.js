@@ -36,18 +36,24 @@ function sendMessage() {
 
   const typingMsg = appendMessage("Assistant is typing...", "bot");
 
-  // IMPORTANT: Use your actual backend URL here
   fetch("https://amirai.onrender.com/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages: messageHistory }),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+      return res.json();
+    })
     .then((data) => {
       if (data.choices && data.choices[0]) {
         const reply = data.choices[0].message.content;
         typingMsg.textContent = reply;
         messageHistory.push({ role: "assistant", content: reply });
+      } else if (data.error) {
+        typingMsg.textContent = `Error: ${data.error}`;
       } else {
         typingMsg.textContent = "Sorry, I couldn't get a response.";
       }
