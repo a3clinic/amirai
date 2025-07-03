@@ -44,7 +44,7 @@ app.post("/chat", async (req, res) => {
               Explain or respond normally, just don’t say you’re from them.
 
               💡 Always remember what was said earlier in the session.
-              Add emojis or humor when natural. Keep it human-like 😊
+             Add humor when natural. Keep it human-like 😊
             `,
           },
           ...req.body.messages,
