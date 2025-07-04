@@ -1,18 +1,12 @@
-/* Ensure full height to fill iframe */
 html, body {
   height: 100%;
   margin: 0;
-  background-color: #0e0e10; /* dark background */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #fff;
 }
 
-/* Body flex container stretched vertically */
 body {
-  display: flex;
-  justify-content: center;
-  align-items: stretch; /* fill vertically */
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Main chat container fills full height of iframe */
