@@ -27,6 +27,7 @@ body {
   font-size: 24px;
   font-weight: 600;
   border-bottom: 1px solid #333;
+  user-select: none;
 }
 
 .chat-box {
@@ -36,6 +37,22 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #00c78e transparent;
+}
+
+/* Webkit scrollbar styling */
+.chat-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background-color: #00c78e;
+  border-radius: 4px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Wraps each message + label */
@@ -60,6 +77,8 @@ body {
   color: #999;
   margin-bottom: 4px;
   padding: 0 4px;
+  user-select: none;
+  font-family: 'Inter', sans-serif;
 }
 
 .chat-message {
@@ -68,6 +87,8 @@ body {
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: 1.5;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
 }
 
 .chat-message.user {
@@ -92,12 +113,16 @@ body {
 textarea {
   flex: 1;
   padding: 12px;
+  font-family: 'Inter', sans-serif; /* Fix font */
   font-size: 16px;
   border-radius: 8px;
   border: none;
   resize: none;
   background-color: #222;
   color: white;
+  line-height: 1.4;
+  max-height: 150px; /* prevent too tall */
+  overflow-y: auto; /* scroll if too tall */
 }
 
 button {
@@ -109,6 +134,7 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s;
+  user-select: none;
 }
 
 button:hover {
