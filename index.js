@@ -18,7 +18,7 @@ if (!OPENROUTER_API_KEY) {
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public"))); // Serve static frontend files
+app.use(express.static(__dirname)); // Serve static frontend files
 
 // Chat API endpoint
 app.post("/chat", async (req, res) => {
