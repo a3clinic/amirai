@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;  // Render default port is 10000
 
 // Hardcoded API key (your real key here)
-const OPENROUTER_API_KEY = "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";
+const OPENROUTER_API_KEY = "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";
 
 // Middleware
 app.use(cors());
