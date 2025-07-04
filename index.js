@@ -7,8 +7,13 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 10000;  // Render default port is 10000
 
-// Hardcoded API key (your real key here)
-const OPENROUTER_API_KEY = "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";
+// Read API key from environment variable set in Render
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+
+if (!OPENROUTER_API_KEY) {
+  console.error("❌ ERROR: OPENROUTER_API_KEY environment variable is NOT set!");
+  process.exit(1); // Stop app if no API key
+}
 
 // Middleware
 app.use(cors());
