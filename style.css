@@ -1,28 +1,34 @@
+/* Ensure full height to fill iframe */
 html, body {
   height: 100%;
   margin: 0;
+  background-color: #0e0e10; /* same dark background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
 }
 
+/* Body flex container stretched vertically */
 body {
-  min-height: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: stretch; /* fill vertically */
+  min-height: 100vh;
 }
 
-/* Main chat container fills full height of iframe */
+/* Main chat container fills full height */
 .chat-container {
-  height: 100%;        /* fill iframe container height */
-  max-height: 100%;
+  height: 100vh; /* fill iframe height */
+  max-height: 100vh;
   width: 100%;
   max-width: 600px;
-  background-color: #1a1a1f;
+  background-color: #1a1a1f; /* darker card background */
   border-radius: 16px;
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.25); /* subtle purple glow */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; /* input stuck to bottom */
   overflow: hidden;
-  padding: 0 16px 16px;
+  padding: 0 16px 16px; /* horizontal + bottom padding */
   box-sizing: border-box;
 }
 
@@ -32,9 +38,9 @@ body {
   padding: 16px;
   font-size: 24px;
   font-weight: 600;
-  border-bottom: 1px solid #2a2a30;
+  border-bottom: 1px solid #2a2a30; /* subtle border */
   user-select: none;
-  color: #a855f7;
+  color: #a855f7; /* purple */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
