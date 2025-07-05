@@ -4,6 +4,23 @@ const sendBtn = document.getElementById("send-btn");
 
 let messageHistory = [];
 
+function renderMarkdown(text) {
+  // Escape HTML special chars to prevent XSS
+  const escapeHtml = (str) =>
+    str.replace(/&/g, "&amp;")
+       .replace(/</g, "&lt;")
+       .replace(/>/g, "&gt;")
+       .replace(/"/g, "&quot;")
+       .replace(/'/g, "&#39;");
+
+  let escaped = escapeHtml(text);
+  // Replace **bold** with <b>bold</b>
+  escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+  // Replace *italic* with <i>italic</i>
+  escaped = escaped.replace(/\*(.*?)\*/g, '<i>$1</i>');
+  return escaped;
+}
+
 function appendMessage(content, sender) {
   const wrapper = document.createElement("div");
   wrapper.className = `chat-wrapper ${sender}`;
@@ -14,7 +31,7 @@ function appendMessage(content, sender) {
 
   const msg = document.createElement("div");
   msg.className = `chat-message ${sender}`;
-  msg.textContent = content;
+  msg.innerHTML = renderMarkdown(content);  // <-- Changed this line from textContent to innerHTML with markdown rendering
 
   wrapper.appendChild(label);
   wrapper.appendChild(msg);
@@ -50,7 +67,7 @@ function sendMessage() {
     .then((data) => {
       if (data.choices && data.choices[0]) {
         const reply = data.choices[0].message.content;
-        typingMsg.textContent = reply;
+        typingMsg.innerHTML = renderMarkdown(reply);  // <-- Also render markdown here
         messageHistory.push({ role: "assistant", content: reply });
       } else if (data.error) {
         typingMsg.textContent = `Error: ${data.error}`;
