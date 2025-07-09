@@ -54,6 +54,7 @@ body {
   gap: 12px;
   scrollbar-width: thin;
   scrollbar-color: #a855f7 transparent;
+  overflow-x: hidden !important; /* Prevent horizontal scroll */
 }
 
 /* Scrollbar styles */
@@ -76,6 +77,8 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 90%;
+  word-break: break-word !important; /* Break long words */
+  overflow-wrap: break-word !important;
 }
 
 .chat-wrapper.user {
