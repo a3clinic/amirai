@@ -118,17 +118,59 @@ input.addEventListener("input", () => {
   input.style.height = input.scrollHeight + "px";
 });
 
-// Copy button event listener for code blocks
+// Copy button event listener for code blocks with mobile support and vibration feedback
 chatBox.addEventListener("click", (e) => {
   if (e.target.classList.contains("copy-btn")) {
     const codeElement = e.target.previousElementSibling.querySelector("code");
-    if (codeElement) {
-      navigator.clipboard.writeText(codeElement.textContent).then(() => {
+    if (!codeElement) return;
+
+    const textToCopy = codeElement.textContent;
+
+    // Try modern clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
         e.target.textContent = "Copied!";
+        if (navigator.vibrate) {
+          navigator.vibrate(100); // Vibrate for 100ms on mobile
+        }
         setTimeout(() => {
           e.target.textContent = "Copy";
         }, 2000);
-      });
+      }).catch(() => fallbackCopy(textToCopy, e.target));
+    } else {
+      // Fallback for older browsers
+      fallbackCopy(textToCopy, e.target);
     }
   }
 });
+
+// Fallback copy function using textarea + execCommand
+function fallbackCopy(text, btn) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";  // prevent scrolling
+  textarea.style.opacity = "0";
+  textarea.style.left = "-9999px";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      btn.textContent = "Copied!";
+      if (navigator.vibrate) {
+        navigator.vibrate(100);
+      }
+      setTimeout(() => {
+        btn.textContent = "Copy";
+      }, 2000);
+    } else {
+      alert("Copy failed, please copy manually.");
+    }
+  } catch (err) {
+    alert("Copy failed, please copy manually.");
+  }
+
+  document.body.removeChild(textarea);
+}
