@@ -4,8 +4,9 @@ const sendBtn = document.getElementById("send-btn");
 
 let messageHistory = [];
 
+// Markdown rendering with code block support
 function renderMarkdown(text) {
-  // Escape HTML special chars to prevent XSS
+  // Escape HTML special chars to prevent XSS (except inside code blocks)
   const escapeHtml = (str) =>
     str.replace(/&/g, "&amp;")
        .replace(/</g, "&lt;")
@@ -13,11 +14,34 @@ function renderMarkdown(text) {
        .replace(/"/g, "&quot;")
        .replace(/'/g, "&#39;");
 
+  // Replace code blocks ```code```
+  // We'll temporarily replace them with a unique placeholder so we don't escape their content
+  const codeBlocks = [];
+  text = text.replace(/```([\s\S]*?)```/g, (match, p1) => {
+    codeBlocks.push(p1);
+    return `@@CODEBLOCK${codeBlocks.length - 1}@@`;
+  });
+
+  // Escape the rest of the text
   let escaped = escapeHtml(text);
+
   // Replace **bold** with <b>bold</b>
   escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
   // Replace *italic* with <i>italic</i>
   escaped = escaped.replace(/\*(.*?)\*/g, '<i>$1</i>');
+
+  // Now replace placeholders with actual code blocks with copy button
+  codeBlocks.forEach((code, idx) => {
+    const codeHtml = `
+      <div class="code-block-wrapper">
+        <pre><code>${escapeHtml(code)}</code></pre>
+        <button class="copy-btn">Copy</button>
+      </div>
+    `;
+    escaped = escaped.replace(`@@CODEBLOCK${idx}@@`, codeHtml);
+  });
+
   return escaped;
 }
 
@@ -31,7 +55,7 @@ function appendMessage(content, sender) {
 
   const msg = document.createElement("div");
   msg.className = `chat-message ${sender}`;
-  msg.innerHTML = renderMarkdown(content);  // <-- Changed this line from textContent to innerHTML with markdown rendering
+  msg.innerHTML = renderMarkdown(content);
 
   wrapper.appendChild(label);
   wrapper.appendChild(msg);
@@ -67,7 +91,7 @@ function sendMessage() {
     .then((data) => {
       if (data.choices && data.choices[0]) {
         const reply = data.choices[0].message.content;
-        typingMsg.innerHTML = renderMarkdown(reply);  // <-- Also render markdown here
+        typingMsg.innerHTML = renderMarkdown(reply);
         messageHistory.push({ role: "assistant", content: reply });
       } else if (data.error) {
         typingMsg.textContent = `Error: ${data.error}`;
@@ -92,4 +116,19 @@ input.addEventListener("keydown", function (e) {
 input.addEventListener("input", () => {
   input.style.height = "auto";
   input.style.height = input.scrollHeight + "px";
+});
+
+// Copy button event listener for code blocks
+chatBox.addEventListener("click", (e) => {
+  if (e.target.classList.contains("copy-btn")) {
+    const codeElement = e.target.previousElementSibling.querySelector("code");
+    if (codeElement) {
+      navigator.clipboard.writeText(codeElement.textContent).then(() => {
+        e.target.textContent = "Copied!";
+        setTimeout(() => {
+          e.target.textContent = "Copy";
+        }, 2000);
+      });
+    }
+  }
 });
