@@ -188,3 +188,41 @@ button:hover {
 .input-container textarea::-webkit-scrollbar-track {
   background: transparent;
 }
+
+.code-block-wrapper {
+  position: relative;
+  background: #1e1e1e;
+  border-radius: 6px;
+  margin: 10px 0;
+  overflow-x: auto;
+  padding: 12px 40px 12px 12px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #eee;
+  white-space: pre;
+}
+
+.code-block-wrapper pre {
+  margin: 0;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #77d683;
+  border: none;
+  color: #222;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.copy-btn:hover {
+  background: #5cb96e;
+}
