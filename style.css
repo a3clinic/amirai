@@ -2,11 +2,10 @@
 html, body {
   height: 100%;
   margin: 0;
-  background-color: #0e0e10; /* same dark background */
+  background: transparent !important;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #fff;
 }
-
 /* Body flex container stretched vertically */
 body {
   display: flex;
